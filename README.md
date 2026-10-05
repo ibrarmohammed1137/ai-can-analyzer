@@ -14,7 +14,7 @@ Interpret CAN bus logs and flag unusual patterns. Fast C++17 core, no runtime de
 
 ## Quickstart
 ```bash
-git clone https://github.com/<your-user>/ai-can-analyzer
+git clone https://github.com/ibrarmohammed1137/ai-can-analyzer
 cd ai-can-analyzer
 cmake --preset ci
 cmake --build --preset ci --parallel

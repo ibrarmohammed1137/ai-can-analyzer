@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { cxx: g++,     werror: "ON"  }
+          - { cxx: clang++, werror: "OFF" }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake --preset ci -DCMAKE_CXX_COMPILER=${{ matrix.cxx }} -DAICAN_ENABLE_WERROR=${{ matrix.werror }}
+      - name: Build
+        run: cmake --build --preset ci --parallel
+      - name: Test
+        run: ctest --preset ci
+
+  sanitizers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cmake --preset debug
+      - run: cmake --build --preset debug --parallel
+      - run: ctest --test-dir build-debug --output-on-failure
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t ai-can-analyzer .
+      - run: docker run --rm -v "$PWD/tests/test_data:/data:ro" ai-can-analyzer sample.log

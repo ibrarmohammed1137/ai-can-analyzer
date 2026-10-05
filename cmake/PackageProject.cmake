@@ -1,0 +1,5 @@
+include(CMakePackageConfigHelpers)
+set(CPACK_PACKAGE_NAME "ai-can-analyzer")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_GENERATOR "TGZ;DEB;RPM")
+include(CPack)
